@@ -18,3 +18,4 @@ Su disco le immagini bitmap sono codificate utilizzando alcune semplici struttur
 ---
 
 method start
+launched once at the start of game.
