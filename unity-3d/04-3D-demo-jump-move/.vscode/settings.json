@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "CapsuleProject.sln"
+    "dotnet.defaultSolution": "04-3D-demo-jump-move.sln"
 }
