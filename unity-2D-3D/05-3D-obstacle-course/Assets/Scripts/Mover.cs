@@ -16,6 +16,9 @@ public class Mover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Input.GetAxis("Vertical") * speed * Time.deltaTime, Input.GetAxisRaw("Jump") * 100 * Time.deltaTime, -Input.GetAxis("Horizontal") * speed * Time.deltaTime);
+        float xAxis = Input.GetAxis("Vertical") * speed * Time.deltaTime;
+        float yAxis = Input.GetAxisRaw("Jump") * 100 * Time.deltaTime;
+        float zAxis = -Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+        transform.Translate(xAxis, yAxis, zAxis);
     }
 }
