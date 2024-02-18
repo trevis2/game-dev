@@ -41,3 +41,9 @@ Identify the Core Features and assign a development risk or complexity:
 - level progression - 2
 - power up items - 2
 - score - 1
+
+Impostazione assi Unity "Vista Back":
+x verso destra
+z verso orizzonte 
+y verso l'alto
+
