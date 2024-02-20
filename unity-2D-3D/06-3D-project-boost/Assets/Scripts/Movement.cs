@@ -12,6 +12,10 @@ public class Movement : MonoBehaviour
     [SerializeField] float rotationSpeed = 75.0f;
     [SerializeField] AudioClip audioEngine;
 
+    [SerializeField] ParticleSystem mainEngineParticle;
+    [SerializeField] ParticleSystem leftThrustParticle;
+    [SerializeField] ParticleSystem rightThrustParticle;
+
     bool isAlive;
 
     void Start()
@@ -32,16 +36,74 @@ public class Movement : MonoBehaviour
         ProcessRotation();
     }
 
+    void ProcessThrust()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            StartThrust();
+        }
+        else
+        {
+            StopThrust();
+        }
+    }
+
+    void StartThrust()
+    {
+        rb.AddRelativeForce(Vector3.up * thrustRate * Time.deltaTime);
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(audioEngine);
+        }
+        if (!mainEngineParticle.isPlaying)
+        {
+            mainEngineParticle.Play();
+        }
+    }
+
+    void StopThrust()
+    {
+        audioSource.Stop();
+        mainEngineParticle.Stop();
+    }
+
     void ProcessRotation()
     {
         if (Input.GetKey(KeyCode.A))
         {
-            ApplyRotation(Vector3.forward);
+            RotateLeft();
         }
-        if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D))
         {
-            ApplyRotation(Vector3.back);
+            RotateRight();
         }
+        else
+        {
+            StopRotating();
+        }
+    }
+
+    private void RotateLeft()
+    {
+        ApplyRotation(Vector3.forward);
+        if (!rightThrustParticle.isPlaying)
+        {
+            rightThrustParticle.Play();
+        }
+    }
+    void RotateRight()
+    {
+        ApplyRotation(Vector3.back);
+        if (!leftThrustParticle.isPlaying)
+        {
+            leftThrustParticle.Play();
+        }
+    }
+
+    void StopRotating()
+    {
+        rightThrustParticle.Stop();
+        leftThrustParticle.Stop();
     }
 
     void ApplyRotation(Vector3 vettore)
@@ -49,21 +111,5 @@ public class Movement : MonoBehaviour
         rb.freezeRotation = true; // freeze rotation so wecan manually rotate
         transform.Rotate(vettore * rotationSpeed * Time.deltaTime);
         rb.freezeRotation = false;
-    }
-
-    void ProcessThrust()
-    {
-        if (Input.GetKey(KeyCode.Space))
-        {
-            rb.AddRelativeForce(Vector3.up * thrustRate * Time.deltaTime);
-            if (!audioSource.isPlaying)
-            {
-                audioSource.PlayOneShot(audioEngine);
-            }
-        }
-        else
-        {
-            audioSource.Stop();
-        }
     }
 }

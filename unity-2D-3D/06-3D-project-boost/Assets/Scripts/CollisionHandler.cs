@@ -16,14 +16,33 @@ public class CollisionHandler : MonoBehaviour
 
     bool isTransitioning = false;
 
+    bool collisionDisabled = false;
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
     }
 
+    void Update()
+    {
+        RespondToDebugKeys();
+    }
+
+    void RespondToDebugKeys()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextLevel();
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            collisionDisabled = !collisionDisabled; //toggle collision
+        }
+    }
+
     void OnCollisionEnter(Collision other)
     {
-        if (isTransitioning)
+        if (collisionDisabled || isTransitioning)
         {
             return;
         }
@@ -50,8 +69,8 @@ public class CollisionHandler : MonoBehaviour
         //sfx effect
         audioSource.Stop();
         audioSource.PlayOneShot(audioCrash);
-
         //particle effect
+        particleCrash.Play();
         GetComponent<Movement>().enabled = false;
         Invoke("ReloadLevel", levelDelay);
     }
@@ -62,6 +81,7 @@ public class CollisionHandler : MonoBehaviour
         audioSource.Stop();
         audioSource.PlayOneShot(audioSuccess);
         //particle effect
+        particleSuccess.Play();
         GetComponent<Movement>().enabled = false;
         Invoke("LoadNextLevel", levelDelay);
     }
