@@ -42,6 +42,30 @@ public class PlayerControls : MonoBehaviour
 
         ProcessTranslation();
         ProcessRotation();
+        ProcessFiring();
+    }
+
+    void ProcessFiring()
+    {
+        if (Input.GetAxis("Fire3") == 1)
+        {
+            Debug.Log("FIRE!");
+        }
+    }
+
+    void ProcessTranslation()
+    {
+        xThrow = Input.GetAxis("Horizontal") * xBoostThrow * Time.deltaTime;
+        yThrow = Input.GetAxis("Vertical") * yBoostThrow * Time.deltaTime;
+
+        float newXPos = transform.localPosition.x + xThrow;
+        float newYPos = transform.localPosition.y + yThrow;
+        float newZPos = transform.localPosition.z;
+
+        float clampedXPos = Mathf.Clamp(newXPos, minXPos, maxXPos);
+        float clampedYPos = Mathf.Clamp(newYPos, minYPos, maxYPos);
+
+        transform.localPosition = new Vector3(clampedXPos, clampedYPos, newZPos);
     }
 
     void ProcessRotation()
@@ -59,20 +83,5 @@ public class PlayerControls : MonoBehaviour
         float clampedPitch = Mathf.Clamp(pitch, -20f, 20f);
 
         transform.localRotation = Quaternion.Euler(clampedPitch, yaw, clampedRoll);
-    }
-
-    void ProcessTranslation()
-    {
-        xThrow = Input.GetAxis("Horizontal") * xBoostThrow * Time.deltaTime;
-        yThrow = Input.GetAxis("Vertical") * yBoostThrow * Time.deltaTime;
-        
-        float newXPos = transform.localPosition.x + xThrow;
-        float newYPos = transform.localPosition.y + yThrow;
-        float newZPos = transform.localPosition.z;
-
-        float clampedXPos = Mathf.Clamp(newXPos, minXPos, maxXPos);
-        float clampedYPos = Mathf.Clamp(newYPos, minYPos, maxYPos);
-
-        transform.localPosition = new Vector3(clampedXPos, clampedYPos, newZPos);
     }
 }
