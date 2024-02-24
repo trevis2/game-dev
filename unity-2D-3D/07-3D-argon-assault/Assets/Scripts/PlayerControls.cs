@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,12 +8,20 @@ public class PlayerControls : MonoBehaviour
 {
     // [SerializeField] InputAction movement;
     // Start is called before the first frame update
-    [SerializeField] float xBoostThrow = 1.0f;
-    [SerializeField] float yBoostThrow = 1.0f;
-    void Start()
-    {
+    [SerializeField][Range(-20f, 0f)] float minXPos = -10f;
+    [SerializeField][Range(0f, 20f)] float maxXPos = 10f;
+    [SerializeField][Range(-20f, 0f)] float minYPos = -10f;
+    [SerializeField][Range(0f, 20f)] float maxYPos = 10f;
+    [SerializeField][Range(0f, 100f)] float xBoostThrow = 1f;
+    [SerializeField][Range(0f, 100f)] float yBoostThrow = 1f;
 
-    }
+    [SerializeField][Range(-20f, 20f)] float positionPitchFactor = -1f;
+    [SerializeField][Range(-20f, 20f)] float positionYawFactor = -1f;
+
+    [SerializeField][Range(-200f, 100f)] float controlPitchFactor = -10f;
+    [SerializeField][Range(-200f, 100f)] float controlRollFactor = -10f;
+
+    float xThrow, yThrow;
 
     //see Execution Order of Unity docs
     // void OnEnable()
@@ -30,17 +39,38 @@ public class PlayerControls : MonoBehaviour
     {
         // float horizontalThrow = movement.ReadValue<Vector2>().x;
         // float verticalThrow = movement.ReadValue<Vector2>().y;
+        xThrow = Input.GetAxis("Horizontal") * xBoostThrow * Time.deltaTime;
+        yThrow = Input.GetAxis("Vertical") * yBoostThrow * Time.deltaTime;
+        ProcessTranslation();
+        ProcessRotation();
+    }
 
-        float xDirectionThrow = Input.GetAxis("Horizontal");
-        float yDirectionThrow = Input.GetAxis("Vertical");
+    void ProcessRotation()
+    {
+        float pitchDueToPosition = transform.localPosition.y * positionPitchFactor;
+        float pitchDueToControl = yThrow * controlPitchFactor;
 
-        float xThrow = xDirectionThrow * xBoostThrow * Time.deltaTime;
-        float yThrow = yDirectionThrow * yBoostThrow * Time.deltaTime;
+        float yawDueToPosition = transform.localPosition.x * positionYawFactor;
+        float rollDueToControl = xThrow * controlRollFactor;
 
+        float pitch = pitchDueToPosition + pitchDueToControl;
+        float yaw = yawDueToPosition;
+        float roll = rollDueToControl;
+        float clampedRoll = Mathf.Clamp(roll, -20f, 20f);
+        float clampedPitch = Mathf.Clamp(pitch, -20f, 20f);
+
+        transform.localRotation = Quaternion.Euler(clampedPitch, yaw, clampedRoll);
+    }
+
+    void ProcessTranslation()
+    {
         float newXPos = transform.localPosition.x + xThrow;
         float newYPos = transform.localPosition.y + yThrow;
         float newZPos = transform.localPosition.z;
 
-        transform.localPosition = new Vector3(newXPos, newYPos, newZPos);
+        float clampedXPos = Mathf.Clamp(newXPos, minXPos, maxXPos);
+        float clampedYPos = Mathf.Clamp(newYPos, minYPos, maxYPos);
+
+        transform.localPosition = new Vector3(clampedXPos, clampedYPos, newZPos);
     }
 }
