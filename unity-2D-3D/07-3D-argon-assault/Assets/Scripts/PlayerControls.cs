@@ -39,8 +39,7 @@ public class PlayerControls : MonoBehaviour
     {
         // float horizontalThrow = movement.ReadValue<Vector2>().x;
         // float verticalThrow = movement.ReadValue<Vector2>().y;
-        xThrow = Input.GetAxis("Horizontal") * xBoostThrow * Time.deltaTime;
-        yThrow = Input.GetAxis("Vertical") * yBoostThrow * Time.deltaTime;
+
         ProcessTranslation();
         ProcessRotation();
     }
@@ -64,6 +63,9 @@ public class PlayerControls : MonoBehaviour
 
     void ProcessTranslation()
     {
+        xThrow = Input.GetAxis("Horizontal") * xBoostThrow * Time.deltaTime;
+        yThrow = Input.GetAxis("Vertical") * yBoostThrow * Time.deltaTime;
+        
         float newXPos = transform.localPosition.x + xThrow;
         float newYPos = transform.localPosition.y + yThrow;
         float newZPos = transform.localPosition.z;
