@@ -393,7 +393,7 @@ Transform:
   m_GameObject: {fileID: 1352315001}
   serializedVersion: 2
   m_LocalRotation: {x: 0.09204307, y: -0.1543894, z: 0.0144473035, w: 0.98360735}
-  m_LocalPosition: {x: 0, y: -99.1, z: 0}
+  m_LocalPosition: {x: 219.84, y: 24.42, z: 69.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -649,30 +649,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1352315002}
     m_Modifications:
-    - target: {fileID: 72951776170355343, guid: 973490261236cc146812c32e909f51a6, type: 3}
-      propertyPath: xBoostThrow
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 72951776170355343, guid: 973490261236cc146812c32e909f51a6, type: 3}
-      propertyPath: yBoostThrow
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 72951776170355343, guid: 973490261236cc146812c32e909f51a6, type: 3}
-      propertyPath: controlRollFactor
-      value: -200
-      objectReference: {fileID: 0}
-    - target: {fileID: 72951776170355343, guid: 973490261236cc146812c32e909f51a6, type: 3}
-      propertyPath: positionYawFactor
-      value: -0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 72951776170355343, guid: 973490261236cc146812c32e909f51a6, type: 3}
-      propertyPath: controlPitchFactor
-      value: -200
-      objectReference: {fileID: 0}
-    - target: {fileID: 72951776170355343, guid: 973490261236cc146812c32e909f51a6, type: 3}
-      propertyPath: positionPitchFactor
-      value: -0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 6275136400605792038, guid: 973490261236cc146812c32e909f51a6, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.0011439545

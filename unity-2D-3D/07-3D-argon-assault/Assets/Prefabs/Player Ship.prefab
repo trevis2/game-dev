@@ -49,8 +49,12 @@ MonoBehaviour:
   maxXPos: 15
   minYPos: -7.2
   maxYPos: 11.7
-  xBoostThrow: 40
-  yBoostThrow: 30
+  xBoostThrow: 10
+  yBoostThrow: 10
+  positionPitchFactor: -0.5
+  positionYawFactor: -0.5
+  controlPitchFactor: -200
+  controlRollFactor: -200
 --- !u!1001 &4707140847372901814
 PrefabInstance:
   m_ObjectHideFlags: 0
