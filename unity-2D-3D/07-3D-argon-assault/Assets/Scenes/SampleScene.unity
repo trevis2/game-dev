@@ -481,31 +481,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4952916543005592634, guid: 00cfb2fcc3697e849a4993cd857e3a7a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 219.84
+      value: 221.8
       objectReference: {fileID: 0}
     - target: {fileID: 4952916543005592634, guid: 00cfb2fcc3697e849a4993cd857e3a7a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 24.42
+      value: 22.14
       objectReference: {fileID: 0}
     - target: {fileID: 4952916543005592634, guid: 00cfb2fcc3697e849a4993cd857e3a7a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 69.56
+      value: 73.49
       objectReference: {fileID: 0}
     - target: {fileID: 4952916543005592634, guid: 00cfb2fcc3697e849a4993cd857e3a7a, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.98360735
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4952916543005592634, guid: 00cfb2fcc3697e849a4993cd857e3a7a, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.09204307
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4952916543005592634, guid: 00cfb2fcc3697e849a4993cd857e3a7a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.1543894
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4952916543005592634, guid: 00cfb2fcc3697e849a4993cd857e3a7a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0144473035
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4952916543005592634, guid: 00cfb2fcc3697e849a4993cd857e3a7a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -519,7 +519,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7490790061068054076, guid: 00cfb2fcc3697e849a4993cd857e3a7a, type: 3}
+    - target: {fileID: 8732115398672664705, guid: 00cfb2fcc3697e849a4993cd857e3a7a, type: 3}
       propertyPath: m_SceneBindings.Array.data[1].value
       value: 
       objectReference: {fileID: 1369605873}
