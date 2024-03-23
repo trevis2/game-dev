@@ -8,18 +8,23 @@ public class PlayerControls : MonoBehaviour
 {
     // [SerializeField] InputAction movement;
     // Start is called before the first frame update
+    [Header("General Setup Settings")]
     [SerializeField][Range(-20f, 0f)] float minXPos = -10f;
     [SerializeField][Range(0f, 20f)] float maxXPos = 10f;
     [SerializeField][Range(-20f, 0f)] float minYPos = -10f;
     [SerializeField][Range(0f, 20f)] float maxYPos = 10f;
-    [SerializeField][Range(0f, 100f)] float xBoostThrow = 1f;
-    [SerializeField][Range(0f, 100f)] float yBoostThrow = 1f;
-
+    [Tooltip("How Fast the ship move")][SerializeField][Range(0f, 100f)] float xBoostThrow = 1f;
+    [Tooltip("How Fast the ship move")][SerializeField][Range(0f, 100f)] float yBoostThrow = 1f;
+    
+    [Header("Position Settings")]
     [SerializeField][Range(-20f, 20f)] float positionPitchFactor = -1f;
     [SerializeField][Range(-20f, 20f)] float positionYawFactor = -1f;
 
     [SerializeField][Range(-200f, 100f)] float controlPitchFactor = -10f;
     [SerializeField][Range(-200f, 100f)] float controlRollFactor = -10f;
+
+    [Header("Lasers Array")]
+    [SerializeField] GameObject[] lasers;
 
     float xThrow, yThrow;
 
@@ -47,9 +52,23 @@ public class PlayerControls : MonoBehaviour
 
     void ProcessFiring()
     {
-        if (Input.GetAxis("Fire3") == 1)
+        if (Input.GetAxis("Fire1") == 1)
         {
-            Debug.Log("FIRE!");
+            ToogleLasers(true);
+        }
+        else
+        {
+            ToogleLasers(false);
+        }
+    }
+
+    private void ToogleLasers(bool isActive)
+    {
+        // turn on the lasers
+        foreach (GameObject laser in lasers)
+        {
+            var emissionModule = laser.GetComponent<ParticleSystem>().emission;
+            emissionModule.enabled = isActive;
         }
     }
 
