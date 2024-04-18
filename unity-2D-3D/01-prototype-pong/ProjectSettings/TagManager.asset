@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ball
   - Opponent
+  - OpponentScoreTrigger
+  - PlayerScoreTrigger
   layers:
   - Default
   - TransparentFX

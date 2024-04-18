@@ -8,5 +8,6 @@ public class PlayerScirpt : MonoBehaviour
     private void Update()
     {
         transform.position += new Vector3(0, Input.GetAxis("Vertical") * Time.deltaTime * speed, 0);
+
     }
 }
