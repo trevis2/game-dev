@@ -6,6 +6,8 @@ public class ShipMovement : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] float xMax = 7.5f;
     [SerializeField] float yMax = 8.5f;
+    [SerializeField] GameObject fireEnginePrefab;
+
     private void Awake()
     {
         Physics2D.gravity = new Vector3(0, 0, 0);
@@ -13,6 +15,7 @@ public class ShipMovement : MonoBehaviour
     void Start()
     {
         transform.position = new Vector3(0, -yMax, 0);
+        fireEnginePrefab.GetComponent<SpriteRenderer>().enabled = false;
     }
 
     // Update is called once per frame
@@ -21,5 +24,14 @@ public class ShipMovement : MonoBehaviour
         float xMove = Mathf.Clamp(transform.position.x + (Input.GetAxis("Horizontal") * velocity * Time.deltaTime), -xMax, xMax);
         float yMove = Mathf.Clamp(transform.position.y + (Input.GetAxis("Vertical") * velocity * Time.deltaTime), -yMax, yMax);
         transform.position = new Vector3(xMove, yMove);
+        if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
+        {
+            fireEnginePrefab.GetComponent<SpriteRenderer>().enabled = true;
+        }
+        else
+        {
+            fireEnginePrefab.GetComponent<SpriteRenderer>().enabled = false;
+        }
+
     }
 }
