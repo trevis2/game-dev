@@ -7,6 +7,7 @@ public class ShipMovement : MonoBehaviour
     [SerializeField] float xMax = 7.5f;
     [SerializeField] float yMax = 8.5f;
     [SerializeField] GameObject fireEnginePrefab;
+    private AudioSource audioSource;
 
     private void Awake()
     {
@@ -16,6 +17,7 @@ public class ShipMovement : MonoBehaviour
     {
         transform.position = new Vector3(0, -yMax, 0);
         fireEnginePrefab.GetComponent<SpriteRenderer>().enabled = false;
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -27,10 +29,15 @@ public class ShipMovement : MonoBehaviour
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
         {
             fireEnginePrefab.GetComponent<SpriteRenderer>().enabled = true;
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
         }
         else
         {
             fireEnginePrefab.GetComponent<SpriteRenderer>().enabled = false;
+            audioSource.Stop();
         }
 
     }
