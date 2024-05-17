@@ -1,5 +1,5 @@
 Goal:
-Create and animate a jet fighter. 
+Create and animate a fighter. 
 The screen will scroll vertically, and the jet can move side to side. 
 The player can accelerate or brake, which will change the vertical scrolling speed.
 
