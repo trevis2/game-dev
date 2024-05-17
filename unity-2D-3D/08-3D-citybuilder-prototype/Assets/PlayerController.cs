@@ -63,15 +63,9 @@ public class PlayerController : MonoBehaviour
 
     private bool TryMove(Vector2 movementInput)
     {
-        int count = rb.Cast(movementInput, movementFilter, castCollisions, movementSpeed * Time.fixedDeltaTime * collisionOffset);
 
-        if (count == 0)
-        {
-            rb.MovePosition(rb.position + movementInput * movementSpeed * Time.fixedDeltaTime);
-            return true;
-        }
-
-        return false;
+        rb.MovePosition(rb.position + movementInput * movementSpeed * Time.fixedDeltaTime);
+        return true;
     }
 
     void OnMove(InputValue movValue)
