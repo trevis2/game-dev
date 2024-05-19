@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,71 +6,90 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float collisionOffset = 0.05f;
+    bool IsMoving
+    {
+        set
+        {
+            isMoving = value;
+            animator.SetBool("isMoving", isMoving);
+        }
+    }
+
+    bool isMoving = false;
+
+    bool canMove = true;
+
     [SerializeField] float movementSpeed = 1.0f;
-    [SerializeField] ContactFilter2D movementFilter;
-    [SerializeField] List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
+    // [SerializeField] float maxSpeed = 2.0f;
+    [SerializeField] float friction = 0.5f;
 
     Animator animator;
     Vector2 movementInput;
-    Rigidbody2D rb;
-    SpriteRenderer sr;
+    new Rigidbody2D rigidbody;
+    SpriteRenderer spriteRenderer;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        sr = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-
-    void Update()
+    void FixedUpdate()
     {
-
+        ProcessMovement();
     }
-    private void FixedUpdate()
+
+    private void ProcessMovement()
     {
-        if (movementInput != Vector2.zero)
+        if (canMove && movementInput != Vector2.zero)
         {
-            bool success = TryMove(movementInput);
-            if (!success)
-            {
-                success = TryMove(new Vector2(movementInput.x, 0));
-            }
-            if (!success)
-            {
-                TryMove(new Vector2(0, movementInput.y));
-            }
-            Debug.Log("success:" + success);
-            Debug.Log("move to:" + rb.position + movementInput * movementSpeed * Time.fixedDeltaTime);
-
-            animator.SetBool("isMoving", success);
+            MoveAndAnimateCharacther();
         }
         else
         {
-            animator.SetBool("isMoving", false);
+            StopMovingCharacter();
         }
+    }
 
+    private void StopMovingCharacter()
+    {
+        //rigidbody.velocity = Vector2.Lerp(rigidbody.velocity, Vector2.zero, friction);
+        rigidbody.velocity = Vector2.zero;
+        IsMoving = false;
+    }
+
+    private void MoveAndAnimateCharacther()
+    {
+        //rigidbody.velocity = Vector2.ClampMagnitude(rigidbody.velocity + (movementInput * movementSpeed * Time.fixedDeltaTime), maxSpeed);
+        rigidbody.position = rigidbody.position + (movementInput * movementSpeed * Time.fixedDeltaTime);
         if (movementInput.x < 0)
         {
-            sr.flipX = true;
+            spriteRenderer.flipX = true;
         }
         else if (movementInput.x > 0)
         {
-            sr.flipX = false;
+            spriteRenderer.flipX = false;
         }
-        //set direction of sprite
-    }
-
-    private bool TryMove(Vector2 movementInput)
-    {
-
-        rb.MovePosition(rb.position + movementInput * movementSpeed * Time.fixedDeltaTime);
-        return true;
+        IsMoving = true;
     }
 
     void OnMove(InputValue movValue)
     {
         movementInput = movValue.Get<Vector2>();
+    }
+
+    void OnFire()
+    {
+        animator.SetTrigger("swordAttack");
+    }
+
+    void LockMovement()
+    {
+        canMove = false;
+    }
+    void UnlockMovement()
+    {
+        canMove = true;
     }
 }
