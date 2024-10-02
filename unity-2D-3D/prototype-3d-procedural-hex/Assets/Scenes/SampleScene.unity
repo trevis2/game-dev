@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 57774893}
   - component: {fileID: 57774892}
   m_Layer: 0
-  m_Name: Test
+  m_Name: Hex
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,12 +148,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 57774891}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9033b1ec4ca1a245b0500b5c146d508, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d20f6d0d03516549b334cd064bd9912, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: ed0023e68713daf40ab21f668ee4d702, type: 2}
   outerRange: 2
   innerRange: 1
+  applyRotation: 0
+  numeroVertici: 6
+  angleRotation: 30
 --- !u!4 &57774893
 Transform:
   m_ObjectHideFlags: 0

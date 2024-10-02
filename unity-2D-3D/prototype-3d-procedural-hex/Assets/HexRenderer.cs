@@ -1,111 +1,93 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HexRenderer : MonoBehaviour
 {
-    //A class that allows you to create or modify meshes.
-    //Meshes contain vertices and multiple triangle arrays.
-    //
     private Mesh m_mesh;
     private MeshFilter m_meshFilter;
     private MeshRenderer m_meshRenderer;
-
-    private List<Face> m_faces;
-
     [SerializeField] Material material;
-    [SerializeField] float innerRadius = 0.5f;
-    [SerializeField] float outerRadius = 0.5f;
-    [SerializeField] float height = 0.5f;
+    [SerializeField][Range(0.0f, 20.0f)] float outerRange = 2.0f;
+    [SerializeField][Range(0.0f, 20.0f)] float innerRange = 1.0f;
+    [SerializeField] bool applyRotation = false;
+    [SerializeField][Range(0, 1000)] int numeroVertici = 6;
+    float angoloFisso;
+    [SerializeField][Range(0.0f, 360.0f)] float angleRotation = 30.0f;
 
 
     private void Awake()
     {
-        m_meshFilter = GetComponent<MeshFilter>();
-        m_meshRenderer = GetComponent<MeshRenderer>();
 
+        m_meshFilter = this.AddComponent<MeshFilter>();
+        m_meshRenderer = this.AddComponent<MeshRenderer>();
         m_mesh = new Mesh();
         m_mesh.name = "Hex";
 
         m_meshFilter.mesh = m_mesh;
         m_meshRenderer.material = material;
     }
-    private void OnEnable()
+
+    private void Update()
     {
-        DrawMesh();
+        angoloFisso = 360.0f / numeroVertici;
+
+
+
+        m_mesh.vertices = CreazioneVertici(); //creo i vertici prima gli interni e poi gli esterni
+        m_mesh.triangles = CreazioneTriangoli(); //la superficie è divisa in 6 facce e ogni faccia composta da 2 triangoli. ogni triangolo ha 3 vertici
+        Color[] colors = new Color[m_mesh.vertices.Length];
+
+        for (int i = 0; i < m_mesh.vertices.Length; i++)
+            colors[i] = Color.Lerp(Color.red, Color.green, m_mesh.vertices[0].y);
+
+        m_mesh.colors = colors;
+        m_mesh.RecalculateNormals();
     }
 
-    private void DrawMesh()
+    private int[] CreazioneTriangoli()
     {
-        DrawFaces();
-        CombineFaces();
-    }
-
-    private void CombineFaces()
-    {
-        List<Vector3> vertices = new List<Vector3>();
-        List<int> triangles = new List<int>();
-        List<Vector2> uvs = new List<Vector2>();
-
-        for (int i = 0; i < m_faces.Count; i++)
+        int[] triangles = new int[0];
+        for (int i = 0; i < numeroVertici; i++)
         {
-            vertices.AddRange(m_faces[i].vertices);
-            uvs.AddRange(m_faces[i].uvs);
-            int offset = 4 * i;
-            foreach (int triangle in m_faces[i].triangles)
-            {
-                triangles.Add(triangle + offset);
-            }
+            int[] faccia = CreaFaccia(i);
+            triangles = triangles.Concat(faccia).ToArray();
         }
+        string arrayString = string.Join(", ", triangles);
+        Debug.Log("triangles: " + arrayString);
+        return triangles.Reverse().ToArray();
+    }
+    private int[] CreaFaccia(int i)
+    {
+        int verticeInterno = i;
+        int verticeEsterno = i + numeroVertici;
+        int verticeInternoSuccessivo = (i + 1) % numeroVertici;
+        int verticeEsternoSuccessivo = numeroVertici + ((i + 1) % numeroVertici);
+
+        int[] triangoloBasso = new int[] { verticeInterno, verticeEsterno, verticeInternoSuccessivo };
+        int[] triangoloAlto = new int[] { verticeInternoSuccessivo, verticeEsterno, verticeEsternoSuccessivo };
+        int[] faccia = triangoloBasso.Concat(triangoloAlto).ToArray();
+        return faccia;
     }
 
-    private void DrawFaces()
+    private Vector3[] CreazioneVertici()
     {
-        m_faces = new List<Face>();
-
-        for (int point = 0; point < 6; point++)
+        Vector3[] vertices = new Vector3[numeroVertici * 2];
+        for (int i = 0; i < numeroVertici; i++)
         {
-            m_faces.Add(CreateFace(innerRadius, outerRadius, height / 2f, height / 2f, point));
+            float angleInRad = i * angoloFisso * Mathf.Deg2Rad + AngleRotation();
+            vertices[i] = new Vector3(innerRange * Mathf.Cos(angleInRad), 0, innerRange * Mathf.Sin(angleInRad));
+            vertices[i + numeroVertici] = new Vector3(outerRange * Mathf.Cos(angleInRad), 0, outerRange * Mathf.Sin(angleInRad));
         }
+        string arrayString = string.Join(", ", vertices);
+        Debug.Log("vertices: " + arrayString);
+        return vertices;
     }
 
-    private Face CreateFace(float innerRad, float outerRad, float heightA, float heightB, int point, bool reverse = false)
+
+    private float AngleRotation()
     {
-        Vector3 pointA = GetPoint(innerRad, heightB, point);
-        Vector3 pointB = GetPoint(innerRad, heightB, (point < 5) ? point + 1 : 0);
-        Vector3 pointC = GetPoint(outerRad, heightA, (point < 5) ? point + 1 : 0);
-        Vector3 pointD = GetPoint(outerRad, heightA, point);
-
-        List<Vector3> vertices = new List<Vector3>() { pointA, pointB, pointC, pointD };
-        List<int> triangles = new List<int>() { 0, 1, 2, 2, 3, 0 };
-        List<Vector2> uvs = new List<Vector2>() { new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1), new Vector2(0, 1) };
-
-        if (reverse)
-        {
-            vertices.Reverse();
-        }
-        return new Face(vertices, triangles, uvs);
-    }
-
-    private Vector3 GetPoint(float size, float height, int index)
-    {
-        float angle_deg = 60 * index;
-        float angle_rad = Mathf.PI / 180f * angle_deg;
-        return new Vector3(size * Mathf.Cos(angle_rad), height, size * Mathf.Sin(angle_rad));
-    }
-}
-
-public struct Face
-{
-    public List<Vector3> vertices { get; private set; } //vertici della faccia
-    public List<int> triangles { get; private set; } //triangoli
-    public List<Vector2> uvs { get; private set; } //non so cos'è uv
-
-    public Face(List<Vector3> vertices, List<int> triangles, List<Vector2> uvs)
-    {
-        this.vertices = vertices;
-        this.triangles = triangles;
-        this.uvs = uvs;
+        return applyRotation ? (angleRotation * Mathf.Deg2Rad) : 0f;
     }
 }
