@@ -308,7 +308,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 40, y: 0, z: 0}
---- !u!1001 &1551624957
+--- !u!1001 &1311020008
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -317,9 +317,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -7186814797796445249, guid: 1277fc9cb8c9af74196c964be64ebcd8, type: 3}
-      propertyPath: material
-      value: 
-      objectReference: {fileID: 2100000, guid: ed0023e68713daf40ab21f668ee4d702, type: 2}
+      propertyPath: innerRange
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -7186814797796445249, guid: 1277fc9cb8c9af74196c964be64ebcd8, type: 3}
+      propertyPath: outerRange
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -7186814797796445249, guid: 1277fc9cb8c9af74196c964be64ebcd8, type: 3}
+      propertyPath: superiorHeight
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3778362420398720848, guid: 1277fc9cb8c9af74196c964be64ebcd8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -482,4 +490,4 @@ SceneRoots:
   - {fileID: 963194228}
   - {fileID: 705507995}
   - {fileID: 1943964146}
-  - {fileID: 1551624957}
+  - {fileID: 1311020008}
