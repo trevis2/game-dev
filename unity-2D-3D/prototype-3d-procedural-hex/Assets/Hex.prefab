@@ -96,11 +96,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d20f6d0d03516549b334cd064bd9912, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  material: {fileID: 0}
+  material: {fileID: 2100000, guid: ed0023e68713daf40ab21f668ee4d702, type: 2}
   outerRange: 3
   innerRange: 1
-  heightSuperior: 4
-  heightInferior: 0
-  numberVertex: 6
-  angleRotation: 30
+  superiorHeight: 2
+  inferiorHeight: 0
   applyRotation: 0

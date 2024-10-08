@@ -34,38 +34,113 @@ public class HexRenderer : MonoBehaviour
         m_meshFilter.mesh = m_mesh;
         m_meshRenderer.material = material;
     }
-    private void Start()
+
+    private void Update()
     {
         DisegnaSuperfici();
         ComponiSuperfici();
     }
+
     private void DisegnaSuperfici()
     {
         //questo metodo disegna le facce del volume e le inserisce nella lista di Facce m_faces
+        m_faces.Add(CreaFacciaSuperiore());
+        m_faces.Add(CreaFacciaInferiore());
+        m_faces.Add(CreaFacciaLateraleInterna());
+        m_faces.Add(CreaFacciaLateraleEsterna());
+    }
 
-        //superficie superiore
-        Face facciaSuperiore = CreaFacciaSuperiore();
-        //superficie inferiore
-        Face facciaInferiore = CreaFacciaInferiore();
+    private void ComponiSuperfici()
+    {
+        List<Vector3> vertices = new List<Vector3>();
+        List<int> triangles = new List<int>();
+        // List<Vector2> uvs = new List<Vector2>();
 
-        //superficie laterale esterna
+        for (int j = 0; j < m_faces.Count; j++)
+        {
+            vertices.AddRange(m_faces[j].vertices);
+            triangles.AddRange(m_faces[j].triangles);
+        }
 
-        //superficie laterale interna
+        string verticesString = string.Join(", ", vertices);
+        Debug.Log("vertices: " + verticesString);
+        string arrayTriangles = string.Join(", ", triangles);
+        Debug.Log("triangles: " + arrayTriangles);
 
-        //aggiungo tutte le facce create
-        m_faces.Add(facciaSuperiore);
-        m_faces.Add(facciaInferiore);
+        m_mesh.vertices = vertices.ToArray();
+        m_mesh.triangles = triangles.ToArray();
+        // m_mesh.uv = uvs.ToArray();
+        m_mesh.RecalculateNormals();
+    }
+
+    private Face CreaFacciaLateraleEsterna()
+    {
+        List<Vector3> vertices = CalculateVertexArrayLateraleEsterna();
+        List<int> triangles = DisegnaTriangoliLateraleEsterna();
+        return new Face(vertices, triangles);
+    }
+
+    private List<int> DisegnaTriangoliLateraleEsterna()
+    {
+        return DisegnaTriangoli((int)FaceEnum.LATERALE_ESTERNA, false);
+    }
+
+    private List<Vector3> CalculateVertexArrayLateraleEsterna()
+    {
+        return CalculateVertexArrayLaterale(outerRange);
+    }
+
+    private Face CreaFacciaLateraleInterna()
+    {
+        List<Vector3> vertices = CalculateVertexArrayLateraleInterna();
+        List<int> triangles = DisegnaTriangoliLateraleInterna();
+        return new Face(vertices, triangles);
+    }
+
+    private List<int> DisegnaTriangoliLateraleInterna()
+    {
+        return DisegnaTriangoli((int)FaceEnum.LATERALE_INTERNA, true);
+    }
+
+    private List<Vector3> CalculateVertexArrayLateraleInterna()
+    {
+        return CalculateVertexArrayLaterale(innerRange);
+    }
+
+    private List<Vector3> CalculateVertexArrayLaterale(float range)
+    {
+
+        float angle = 360.0f / numberVertex * Mathf.Deg2Rad;
+
+        List<Vector3> lowVertices = new List<Vector3>(numberVertex);
+        List<Vector3> highVertices = new List<Vector3>(numberVertex);
+
+        for (int i = 0; i < numberVertex; i++)
+        {
+            float angleInRad = i * angle + GetAngleRotation();
+            //vertici interni inferiori
+            lowVertices.Add(new Vector3(range * Mathf.Cos(angleInRad), inferiorHeight, range * Mathf.Sin(angleInRad)));
+        }
+        for (int i = 0; i < numberVertex; i++)
+        {
+            float angleInRad = i * angle + GetAngleRotation();
+            //vertici interni superiori
+            highVertices.Add(new Vector3(range * Mathf.Cos(angleInRad), superiorHeight, range * Mathf.Sin(angleInRad)));
+        }
+
+        lowVertices.AddRange(highVertices);
+        return lowVertices;
     }
 
     Face CreaFacciaSuperiore()
     {
-        List<Vector3> vertices = CalculateVertexArraySuperiore();
-        List<int> triangles = DisegnaTriangoliSuperiori();
-        string verticesString = string.Join(", ", vertices);
-        Debug.Log("vertici Superior: " + verticesString);
-        string arrayTriangles = string.Join(", ", triangles);
-        Debug.Log("triangoli Superiori: " + arrayTriangles);
-        return new Face(vertices, triangles);
+        // List<Vector3> vertices = ;
+        // List<int> triangles = ;
+        // string verticesString = string.Join(", ", vertices);
+        // Debug.Log("vertici Superior: " + verticesString);
+        // string arrayTriangles = string.Join(", ", triangles);
+        // Debug.Log("triangoli Superiori: " + arrayTriangles);
+        return new Face(CalculateVertexArraySuperiore(), DisegnaTriangoliSuperiori());
     }
     Face CreaFacciaInferiore()
     {
@@ -112,16 +187,16 @@ public class HexRenderer : MonoBehaviour
     }
     private List<int> DisegnaTriangoliSuperiori()
     {
-        List<int> triangles = DisegnaTriangoli((int)FaceEnum.SUPERIORE);
+        List<int> triangles = DisegnaTriangoli((int)FaceEnum.SUPERIORE, true);
         string arrayTriangles = string.Join(", ", triangles);
         Debug.Log("DisegnaTriangoliSuperiori: " + arrayTriangles);
         return triangles;
     }
     private List<int> DisegnaTriangoliInferiori()
     {
-        return DisegnaTriangoli((int)FaceEnum.INFERIORE);
+        return DisegnaTriangoli((int)FaceEnum.INFERIORE, true);
     }
-    private List<int> DisegnaTriangoli(int faceIndex)
+    private List<int> DisegnaTriangoli(int faceIndex, bool reverse)
     {
         Debug.Log("faceIndex: " + faceIndex);
         List<int> triangles = new List<int>();
@@ -146,37 +221,13 @@ public class HexRenderer : MonoBehaviour
             triangles.AddRange(highTriangle);
         }
 
-        triangles.Reverse();
+        if (reverse) triangles.Reverse();
         return triangles;
     }
 
     private float GetAngleRotation()
     {
         return applyRotation ? (angleRotation * Mathf.Deg2Rad) : 0f;
-    }
-
-    private void ComponiSuperfici()
-    {
-        List<Vector3> vertices = new List<Vector3>();
-        List<int> triangles = new List<int>();
-        List<Vector2> uvs = new List<Vector2>();
-
-
-        for (int j = 0; j < m_faces.Count; j++)
-        {
-            vertices.AddRange(m_faces[j].vertices);
-            triangles.AddRange(m_faces[j].triangles);
-        }
-
-        string verticesString = string.Join(", ", vertices);
-        Debug.Log("vertices: " + verticesString);
-        string arrayTriangles = string.Join(", ", triangles);
-        Debug.Log("triangles: " + arrayTriangles);
-
-        m_mesh.vertices = vertices.ToArray();
-        m_mesh.triangles = triangles.ToArray();
-        m_mesh.uv = uvs.ToArray();
-        m_mesh.RecalculateNormals();
     }
 
 
@@ -187,9 +238,11 @@ enum FaceEnum : int
 {
     SUPERIORE = 0,
     INFERIORE = 1,
-    LATERALE_ESTERNA = 2,
-    LATERALE_INTERNA = 3
+    LATERALE_INTERNA = 2,
+    LATERALE_ESTERNA = 3
 }
+
+
 
 public struct Face
 {
