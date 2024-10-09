@@ -97,8 +97,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: ed0023e68713daf40ab21f668ee4d702, type: 2}
-  outerRange: 3
-  innerRange: 1
-  superiorHeight: 2
+  outerRange: 0.4
+  innerRange: 0.3
+  superiorHeight: 0.1
   inferiorHeight: 0
   applyRotation: 0

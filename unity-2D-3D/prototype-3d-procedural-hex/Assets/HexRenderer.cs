@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
@@ -11,10 +12,10 @@ public class HexRenderer : MonoBehaviour
     private MeshFilter m_meshFilter;
     private MeshRenderer m_meshRenderer;
     [SerializeField] Material material;
-    [SerializeField][Range(0.0f, 20.0f)] float outerRange = 2.0f;
-    [SerializeField][Range(0.0f, 20.0f)] float innerRange = 1.0f;
-    [SerializeField][Range(0.0f, 20.0f)] float superiorHeight = 2.0f;
-    [SerializeField][Range(0.0f, 20.0f)] float inferiorHeight = 0.0f;
+    public float outerRange { get; set; } = 2.0f;
+    public float innerRange { get; set; } = 1.0f;
+    public float superiorHeight { get; set; } = 2.0f;
+    public float inferiorHeight { get; set; } = 0.0f;
 
     //[SerializeField][Range(1, 10)] 
     int numberVertex = 6;
@@ -22,7 +23,7 @@ public class HexRenderer : MonoBehaviour
     float angleRotation = 30.0f;
     [SerializeField] bool applyRotation = false;
 
-    private List<Face> m_faces = new List<Face>(4);
+
 
     private void Awake()
     {
@@ -37,11 +38,17 @@ public class HexRenderer : MonoBehaviour
 
     private void Update()
     {
-        DisegnaSuperfici();
-        ComponiSuperfici();
+        DrawMesh();
+
+    }
+    public void DrawMesh()
+    {
+        List<Face> m_faces = new List<Face>(4);
+        DisegnaSuperfici(m_faces);
+        ComponiSuperfici(m_faces);
     }
 
-    private void DisegnaSuperfici()
+    private void DisegnaSuperfici(List<Face> m_faces)
     {
         //questo metodo disegna le facce del volume e le inserisce nella lista di Facce m_faces
         m_faces.Add(CreaFacciaSuperiore());
@@ -50,12 +57,12 @@ public class HexRenderer : MonoBehaviour
         m_faces.Add(CreaFacciaLateraleEsterna());
     }
 
-    private void ComponiSuperfici()
+    private void ComponiSuperfici(List<Face> m_faces)
     {
         List<Vector3> vertices = new List<Vector3>();
         List<int> triangles = new List<int>();
         // List<Vector2> uvs = new List<Vector2>();
-
+        // Debug.Log("vertices:\n" + string.Join(", ", m_faces[0].vertices.Select(v => v.ToString())));
         for (int j = 0; j < m_faces.Count; j++)
         {
             vertices.AddRange(m_faces[j].vertices);
@@ -63,9 +70,9 @@ public class HexRenderer : MonoBehaviour
         }
 
         string verticesString = string.Join(", ", vertices);
-        Debug.Log("vertices: " + verticesString);
+        // Debug.Log("vertices: " + verticesString);
         string arrayTriangles = string.Join(", ", triangles);
-        Debug.Log("triangles: " + arrayTriangles);
+        // Debug.Log("triangles: " + arrayTriangles);
 
         m_mesh.vertices = vertices.ToArray();
         m_mesh.triangles = triangles.ToArray();
@@ -140,21 +147,24 @@ public class HexRenderer : MonoBehaviour
         // Debug.Log("vertici Superior: " + verticesString);
         // string arrayTriangles = string.Join(", ", triangles);
         // Debug.Log("triangoli Superiori: " + arrayTriangles);
-        return new Face(CalculateVertexArraySuperiore(), DisegnaTriangoliSuperiori());
+        List<Vector3> returnvertices = CalculateVertexArraySuperiore();
+        Face faccia = new Face(returnvertices, DisegnaTriangoliSuperiori());
+        return faccia;
     }
     Face CreaFacciaInferiore()
     {
         List<Vector3> vertices = CalculateVertexArrayInferiore();
         List<int> triangles = DisegnaTriangoliInferiori();
         string verticesString = string.Join(", ", vertices);
-        Debug.Log("vertici Inferiori: " + verticesString);
+        // Debug.Log("vertici Inferiori: " + verticesString);
         string arrayTriangles = string.Join(", ", triangles);
-        Debug.Log("triangoli Inferiori: " + arrayTriangles);
+        // Debug.Log("triangoli Inferiori: " + arrayTriangles);
         return new Face(vertices, triangles);
     }
 
     private List<Vector3> CalculateVertexArraySuperiore()
     {
+
         return CalculateVertexArray(superiorHeight);
     }
 
@@ -165,7 +175,7 @@ public class HexRenderer : MonoBehaviour
     private List<Vector3> CalculateVertexArray(float height)
     {
         float angle = 360.0f / numberVertex * Mathf.Deg2Rad;
-
+        List<Vector3> returnvertices = new List<Vector3>();
         List<Vector3> internalVertices = new List<Vector3>(numberVertex);
         List<Vector3> externalVertices = new List<Vector3>(numberVertex);
 
@@ -181,15 +191,15 @@ public class HexRenderer : MonoBehaviour
             //vertici esterni
             externalVertices.Add(new Vector3(outerRange * Mathf.Cos(angleInRad), height, outerRange * Mathf.Sin(angleInRad)));
         }
-
-        internalVertices.AddRange(externalVertices);
-        return internalVertices;
+        returnvertices.AddRange(internalVertices);
+        returnvertices.AddRange(externalVertices);
+        return returnvertices;
     }
     private List<int> DisegnaTriangoliSuperiori()
     {
         List<int> triangles = DisegnaTriangoli((int)FaceEnum.SUPERIORE, true);
         string arrayTriangles = string.Join(", ", triangles);
-        Debug.Log("DisegnaTriangoliSuperiori: " + arrayTriangles);
+        // Debug.Log("DisegnaTriangoliSuperiori: " + arrayTriangles);
         return triangles;
     }
     private List<int> DisegnaTriangoliInferiori()
@@ -198,10 +208,10 @@ public class HexRenderer : MonoBehaviour
     }
     private List<int> DisegnaTriangoli(int faceIndex, bool reverse)
     {
-        Debug.Log("faceIndex: " + faceIndex);
+        // Debug.Log("faceIndex: " + faceIndex);
         List<int> triangles = new List<int>();
         int factor = faceIndex * 2 * numberVertex;
-        Debug.Log("factor: " + factor);
+        // Debug.Log("factor: " + factor);
         for (int i = 0; i < numberVertex; i++)
         {
             int internalVertex = i;
