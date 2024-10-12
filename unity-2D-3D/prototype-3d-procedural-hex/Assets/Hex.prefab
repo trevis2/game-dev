@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2840107053886134725}
   - component: {fileID: -3421167790287040305}
   - component: {fileID: -7186814797796445249}
+  - component: {fileID: -8516190700453602436}
   m_Layer: 0
   m_Name: Hex
   m_TagString: Untagged
@@ -97,8 +98,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: ed0023e68713daf40ab21f668ee4d702, type: 2}
-  outerRange: 0.4
-  innerRange: 0.3
-  superiorHeight: 0.1
+  outerRange: 2
+  innerRange: 1
+  superiorHeight: 2
   inferiorHeight: 0
   applyRotation: 0
+--- !u!114 &-8516190700453602436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4077047065643540420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aca33942d2615a418a1d49ac7d70e9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scriptTarget: {fileID: -7186814797796445249}
+  integerSlider: {fileID: 0}
+  booleanDropdown: {fileID: 0}

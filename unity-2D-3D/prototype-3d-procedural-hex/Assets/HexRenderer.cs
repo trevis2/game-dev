@@ -11,18 +11,17 @@ public class HexRenderer : MonoBehaviour
     private Mesh m_mesh;
     private MeshFilter m_meshFilter;
     private MeshRenderer m_meshRenderer;
-    [SerializeField] Material material;
-    public float outerRange { get; set; } = 2.0f;
-    public float innerRange { get; set; } = 1.0f;
-    public float superiorHeight { get; set; } = 2.0f;
-    public float inferiorHeight { get; set; } = 0.0f;
+    public Material material;
+    public float outerRange = 2.0f;
+    public float innerRange = 1.0f;
+    public float superiorHeight = 2.0f;
+    public float inferiorHeight = 0.0f;
 
     //[SerializeField][Range(1, 10)] 
     int numberVertex = 6;
     //[SerializeField][Range(0.0f, 360.0f)] 
     float angleRotation = 30.0f;
-    [SerializeField] bool applyRotation = false;
-
+    public bool applyRotation = false;
 
 
     private void Awake()
@@ -39,8 +38,8 @@ public class HexRenderer : MonoBehaviour
     private void Update()
     {
         DrawMesh();
-
     }
+
     public void DrawMesh()
     {
         List<Face> m_faces = new List<Face>(4);
