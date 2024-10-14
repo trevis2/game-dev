@@ -43,6 +43,11 @@ public class EnemyMover : MonoBehaviour
     {
         enemy.StealGold();
         gameObject.SetActive(false);
+
+    }
+    public void IncreaseSpeed()
+    {
+        speed += enemy.DifficultyRamp;
     }
 
     IEnumerator FollowPath()

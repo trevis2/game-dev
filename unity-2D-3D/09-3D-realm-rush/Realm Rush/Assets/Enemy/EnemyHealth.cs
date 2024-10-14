@@ -1,17 +1,20 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Enemy))]
+[RequireComponent(typeof(EnemyMover))]
 public class EnemyHealth : MonoBehaviour
 {
     [SerializeField] int maxHitPoints = 5;
-    [Tooltip("Valore aggiunto alla vita nemica quando muore")]
-    [SerializeField] int difficultyRamp = 1;
+
     int currentHitPoint = 0;
 
     Enemy enemy;
+    EnemyMover enemyMover;
+
     private void Start()
     {
         enemy = GetComponent<Enemy>();
+        enemyMover = GetComponent<EnemyMover>();
     }
 
     void OnEnable()
@@ -31,7 +34,9 @@ public class EnemyHealth : MonoBehaviour
         {
             enemy.RewardGold();
             gameObject.SetActive(false);
-            maxHitPoints += difficultyRamp;
+            maxHitPoints += enemy.DifficultyRamp;
+            enemy.IncreaseDifficulty();
+            enemyMover.IncreaseSpeed();
         }
     }
 }

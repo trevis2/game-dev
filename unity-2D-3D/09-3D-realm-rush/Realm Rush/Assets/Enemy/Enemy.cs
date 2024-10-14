@@ -7,6 +7,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] int goldReward = 25;
     [SerializeField] int goldPenalty = 25;
 
+    [Tooltip("Valore aggiunto alla vita,speed e gold penalty nemica quando muore")]
+    [SerializeField] int difficultyRamp = 1;
+    public int DifficultyRamp { get { return difficultyRamp; } }
+
     Bank bank;
     void Start()
     {
@@ -23,5 +27,10 @@ public class Enemy : MonoBehaviour
     {
         if (bank == null) { return; }
         bank.Withdraw(goldPenalty);
+    }
+
+    public void IncreaseDifficulty()
+    {
+        goldPenalty += difficultyRamp;
     }
 }
