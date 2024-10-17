@@ -11,10 +11,12 @@ public class Bank : MonoBehaviour
     public int CurrentBalance { get { return currentBalance; } }
 
     [SerializeField] TextMeshProUGUI displayBalance;
+    [SerializeField] GameObject gameOverPanel;
 
     private void Awake()
     {
         currentBalance = startingBalance;
+        gameOverPanel.SetActive(false);
         UpdateGoldDisplay(currentBalance);
     }
     public void Deposit(int amount)
@@ -29,7 +31,8 @@ public class Bank : MonoBehaviour
         UpdateGoldDisplay(currentBalance);
         if (currentBalance < 0)
         {
-            ReloadScene();
+            gameOverPanel.SetActive(true);
+            Invoke("ReloadScene", 2f);
         }
     }
 

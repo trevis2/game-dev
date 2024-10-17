@@ -7,10 +7,14 @@ public class EnemyMover : MonoBehaviour
 {
     [SerializeField] List<Waypoint> path = new List<Waypoint>();
     [SerializeField][Range(0f, 5f)] float speed = 3f;
+    float oldSpeed = 0f;
+    bool isPressedPause = false;
+    //[SerializeField] GameObject panelPause;
     Enemy enemy;
 
     void OnEnable()
     {
+        //panelPause = GameObject.FindWithTag("PausePanel");
         FindPath();
         ReturnToStart();
         StartCoroutine(FollowPath());
@@ -18,6 +22,25 @@ public class EnemyMover : MonoBehaviour
     private void Start()
     {
         enemy = GetComponent<Enemy>();
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (!isPressedPause)
+            {
+                //panelPause.SetActive(true);
+                oldSpeed = speed;
+                speed = 0;
+                isPressedPause = true;
+            }
+            else
+            {
+                //panelPause.SetActive(false);
+                speed = oldSpeed;
+                isPressedPause = false;
+            }
+        }
     }
 
     void FindPath()
