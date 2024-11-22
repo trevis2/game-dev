@@ -2118,11 +2118,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -7186814797796445249, guid: 1277fc9cb8c9af74196c964be64ebcd8, type: 3}
       propertyPath: innerRange
-      value: 0.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7186814797796445249, guid: 1277fc9cb8c9af74196c964be64ebcd8, type: 3}
       propertyPath: outerRange
-      value: 0.5
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -7186814797796445249, guid: 1277fc9cb8c9af74196c964be64ebcd8, type: 3}
+      propertyPath: applyRotation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7186814797796445249, guid: 1277fc9cb8c9af74196c964be64ebcd8, type: 3}
+      propertyPath: superiorHeight
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3778362420398720848, guid: 1277fc9cb8c9af74196c964be64ebcd8, type: 3}
       propertyPath: m_LocalPosition.x
